@@ -1,0 +1,33 @@
+:root {
+  --font-reading: 'Charter', 'Iowan Old Style', 'Georgia', 'Times New Roman', serif;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'Consolas', monospace;
+
+  --color-bg: #fbfaf7;
+  --color-text: #262626;
+  --color-muted: #7a7a7a;
+  --color-highlight: #fff3b0;
+  --color-accent: #b5541d;
+  --color-border: #e6e2d8;
+
+  --measure: 68ch;
+  --leading: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+}
+
+.app {
+  max-width: var(--measure);
+  margin: 4rem auto;
+  padding: 0 1rem;
+}

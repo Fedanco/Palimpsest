@@ -1,0 +1,5 @@
+# Normalise line endings to LF in the repo and on checkout, regardless of core.autocrlf.
+* text=auto eol=lf
+
+# Fixtures must keep their exact bytes: some intentionally use CRLF or a BOM.
+fixtures/** -text

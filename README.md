@@ -77,4 +77,4 @@ Not lines of code. The test is whether it gets opened out of habit instead of th
 
 ## License
 
-MIT (planned)
+MIT — see [LICENSE](LICENSE).
