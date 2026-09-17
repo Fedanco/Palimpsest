@@ -1,4 +1,5 @@
 import { Node, mergeAttributes } from '@tiptap/core'
+import { markdownIt } from '../../markdown/parse.ts'
 
 export type RawBlockKind = 'math' | 'html' | 'table' | 'unknown'
 
@@ -32,5 +33,27 @@ export const RawBlock = Node.create({
       mergeAttributes(HTMLAttributes, { 'data-raw-block': node.attrs.kind, class: 'raw-block' }),
       ['code', {}, node.attrs.text],
     ]
+  },
+
+  addNodeView() {
+    return ({ node }) => {
+      const kind: RawBlockKind = node.attrs.kind
+      const text: string = node.attrs.text
+      const dom = document.createElement('div')
+      dom.className = `raw-block raw-${kind}`
+      dom.contentEditable = 'false'
+      if (kind === 'table' || kind === 'html') {
+        // Tables and HTML read far better rendered than as source. The file
+        // is the reader's own, so rendering its HTML is acceptable here.
+        dom.innerHTML = markdownIt.render(text)
+      } else {
+        const pre = document.createElement('pre')
+        const code = document.createElement('code')
+        code.textContent = text
+        pre.appendChild(code)
+        dom.appendChild(pre)
+      }
+      return { dom }
+    }
   },
 })

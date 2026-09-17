@@ -3,6 +3,7 @@ import Highlight from '@tiptap/extension-highlight'
 import StarterKit from '@tiptap/starter-kit'
 import { RawBlock } from './extensions/RawBlock.ts'
 import { RawInline } from './extensions/RawInline.ts'
+import { ReadingMode } from './extensions/ReadingMode.ts'
 import { SourceTracking } from './extensions/SourceTracking.ts'
 
 /** The one list of extensions, shared by the editor and the headless pipeline. */
@@ -17,6 +18,7 @@ export const extensions = [
   RawBlock,
   RawInline,
   SourceTracking,
+  ReadingMode,
 ]
 
 export const schema = getSchema(extensions)

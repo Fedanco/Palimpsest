@@ -1,17 +1,22 @@
 :root {
-  --font-reading: 'Charter', 'Iowan Old Style', 'Georgia', 'Times New Roman', serif;
+  --font-reading: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Georgia', serif;
   --font-ui: system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: ui-monospace, 'Cascadia Mono', 'Consolas', monospace;
 
-  --color-bg: #fbfaf7;
-  --color-text: #262626;
-  --color-muted: #7a7a7a;
-  --color-highlight: #fff3b0;
+  --color-bg: #f7f5f0;
+  --color-page: #fffdf9;
+  --color-text: #262421;
+  --color-muted: #7a7670;
+  --color-highlight: #fff1a8;
   --color-accent: #b5541d;
-  --color-border: #e6e2d8;
+  --color-border: #e4dfd4;
+  --color-editing: #fbf4e6;
+  --color-raw-bg: #f3f0ea;
 
-  --measure: 68ch;
-  --leading: 1.6;
+  --sidebar-width: 17rem;
+  --measure: 66ch;
+  --reading-size: 1.125rem;
+  --leading: 1.65;
 }
 
 * {
@@ -19,15 +24,415 @@
 }
 
 html,
-body {
+body,
+#root {
+  height: 100%;
   margin: 0;
+}
+
+body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
 }
 
-.app {
+button {
+  font: inherit;
+}
+
+/* ---------- landing ---------- */
+
+.landing {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 18vh 1.5rem 0;
+  text-align: center;
+}
+
+.landing h1 {
+  font-family: var(--font-reading);
+  font-weight: 500;
+  font-size: 3rem;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.25rem;
+}
+
+.landing-tagline {
+  font-family: var(--font-reading);
+  font-style: italic;
+  color: var(--color-muted);
+  font-size: 1.2rem;
+  margin: 0 0 2.5rem;
+}
+
+.landing-open {
+  background: var(--color-text);
+  color: var(--color-page);
+  border: 0;
+  border-radius: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.landing-open:hover {
+  background: #000;
+}
+
+.landing-unsupported,
+.landing-error {
+  color: var(--color-accent);
+  line-height: 1.5;
+}
+
+.landing-hint {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-top: 2.5rem;
+}
+
+/* ---------- reader layout ---------- */
+
+.reader {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+}
+
+.sidebar {
+  grid-row: 1;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  padding: 1.25rem 0 2rem;
+  font-size: 0.85rem;
+}
+
+.sidebar-title {
+  padding: 0 1.25rem 0.75rem;
+  color: var(--color-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reader-scroll {
+  grid-row: 1;
+  overflow-y: auto;
+  scroll-padding-top: 2rem;
+}
+
+.page {
+  max-width: calc(var(--measure) + 6rem);
+  margin: 0 auto;
+  padding: 3rem 3rem 12rem;
+}
+
+/* ---------- outline ---------- */
+
+.outline ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.outline-item button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  padding: 0.3rem 1.25rem 0.3rem calc(1.1rem + (var(--depth, 0) * 0.85rem));
+  color: var(--color-muted);
+  cursor: pointer;
+  line-height: 1.35;
+}
+
+.outline-item.level-1 {
+  --depth: 0;
+}
+.outline-item.level-2 {
+  --depth: 1;
+}
+.outline-item.level-3 {
+  --depth: 2;
+}
+.outline-item.level-4,
+.outline-item.level-5,
+.outline-item.level-6 {
+  --depth: 3;
+}
+
+.outline-item.level-1 button {
+  color: var(--color-text);
+  font-weight: 600;
+  margin-top: 0.35rem;
+}
+
+.outline-item button:hover {
+  color: var(--color-text);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.outline-item.is-active button {
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+}
+
+.outline-empty {
+  padding: 0 1.25rem;
+  color: var(--color-muted);
+}
+
+/* ---------- status bar ---------- */
+
+.statusbar {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.4rem 1rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.statusbar-file {
+  font-weight: 600;
+  color: var(--color-text);
+  max-width: 16rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusbar-mode {
+  flex: 1;
+}
+
+.statusbar-mode.is-editing {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.statusbar-save.save-saved {
+  color: #3a7d44;
+}
+.statusbar-save.save-dirty,
+.statusbar-save.save-saving {
+  color: var(--color-muted);
+}
+.statusbar-save.save-no-permission,
+.statusbar-save.save-conflict,
+.statusbar-save.save-error {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.statusbar button {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.statusbar button:hover {
+  border-color: var(--color-muted);
+}
+
+/* ---------- reading typography ---------- */
+
+.ProseMirror {
+  outline: none;
+  font-family: var(--font-reading);
+  font-size: var(--reading-size);
+  line-height: var(--leading);
   max-width: var(--measure);
-  margin: 4rem auto;
-  padding: 0 1rem;
+  margin: 0 auto;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.ProseMirror > * {
+  /* Room for the editing marker in the left gutter. */
+  position: relative;
+}
+
+.ProseMirror p {
+  margin: 0 0 1em;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 2em 0 0.6em;
+  letter-spacing: -0.01em;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  margin-top: 0;
+}
+.ProseMirror h2 {
+  font-size: 1.5rem;
+}
+.ProseMirror h3 {
+  font-size: 1.2rem;
+}
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-size: 1rem;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.6em;
+  margin: 0 0 1em;
+}
+
+.ProseMirror li > p {
+  margin: 0 0 0.25em;
+}
+
+.ProseMirror blockquote {
+  margin: 0 0 1em;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 3px solid var(--color-border);
+  color: #4a4741;
+}
+
+.ProseMirror code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-raw-bg);
+  border-radius: 0.2em;
+  padding: 0.1em 0.3em;
+}
+
+.ProseMirror pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-raw-bg);
+  border-radius: 0.3rem;
+  padding: 0.8em 1em;
+  margin: 0 0 1em;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.ProseMirror hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2em 0;
+}
+
+.ProseMirror a {
+  color: var(--color-accent);
+}
+
+.ProseMirror mark {
+  background: var(--color-highlight);
+  color: inherit;
+  padding: 0.05em 0;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.ProseMirror ::selection {
+  background: #cfe3ff;
+}
+
+/* raw content: math, html, tables, unknown */
+
+.raw-inline {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-raw-bg);
+  border-radius: 0.2em;
+  padding: 0.05em 0.3em;
+}
+
+.raw-inline[data-raw-inline='image'] {
+  color: var(--color-muted);
+}
+
+.raw-block {
+  margin: 0 0 1em;
+}
+
+.raw-block pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.raw-math pre {
+  text-align: center;
+  background: var(--color-raw-bg);
+  border-left: 3px solid var(--color-border);
+}
+
+.raw-block table {
+  border-collapse: collapse;
+  font-size: 0.92em;
+  margin: 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.raw-block th,
+.raw-block td {
+  border: 1px solid var(--color-border);
+  padding: 0.35em 0.7em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.raw-block th {
+  background: var(--color-raw-bg);
+  font-weight: 600;
+}
+
+/* ---------- editing state ---------- */
+
+.ProseMirror .is-editing {
+  background: var(--color-editing);
+  box-shadow: 0 0 0 0.6rem var(--color-editing);
+  border-radius: 0.1rem;
+}
+
+.ProseMirror .is-editing::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+.ProseMirror[contenteditable='false'] {
+  caret-color: transparent;
+  cursor: default;
+}
+
+.ProseMirror[contenteditable='true'] {
+  cursor: text;
 }
